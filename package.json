@@ -2,8 +2,16 @@
   "name": "indefinitely-typed",
   "version": "1.0.0",
   "description": "Temporary @types",
-  "main": "index.js",
+  "bin": {
+    "indefinitely-typed-install": "./dist/cli.js"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
+    "build": "tsc -p ./src",
+    "watch": "tsc -p ./src -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,6 +25,13 @@
   },
   "homepage": "https://github.com/danmarshall/indefinitely-typed#readme",
   "dependencies": {
-    "fs-extra": "^7.0.0"
+    "fs-extra": "^7.0.0",
+    "minimist": "^1.2.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^5.0.4",
+    "@types/minimist": "^1.2.0",
+    "@types/node": "^10.11.7",
+    "typescript": "^3.1.3"
   }
 }
