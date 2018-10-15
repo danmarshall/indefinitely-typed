@@ -69,22 +69,13 @@ if (!fs.existsSync(pathToPackageJson)) {
         }
         console.log(`using @types folder at ${types}`);
 
-        //let copies: string[] = [];
+        if (args.omitThis) {
+            console.log(`--omitThis passed, omitting root folder`);
+        } else {
+            args.copy.push('.');
+        }
 
-        // if (args.omitThis) {
-        //     console.log(`--omitThis passed, omitting root folder`);
-        // } else {
-        //     copies.push('.');
-        // }
-
-        // if (Array.isArray(args.copy)) {
-        //     copies.push.apply(copies, args.copy);
-        // } else if (typeof args.copy === 'string') {
-        //     const split = args.copy.split(',');
-        //     copies.push.apply(copies, split);
-        // }
-
-        // copies.forEach(copy => copyToTypes(copy, types));
+        args.copy.forEach(copy => copyToTypes(copy, types));
 
         console.log(`installation complete!`)
     }

@@ -43,25 +43,19 @@ else {
         console.log("error: this is not a node_modules folder.");
     }
     else {
-        var types = path.resolve(node_modules, '@types');
-        if (!fs.existsSync(types)) {
-            console.log("creating folder " + types);
-            fs.mkdirSync(types);
+        var types_1 = path.resolve(node_modules, '@types');
+        if (!fs.existsSync(types_1)) {
+            console.log("creating folder " + types_1);
+            fs.mkdirSync(types_1);
         }
-        console.log("using @types folder at " + types);
-        //let copies: string[] = [];
-        // if (args.omitThis) {
-        //     console.log(`--omitThis passed, omitting root folder`);
-        // } else {
-        //     copies.push('.');
-        // }
-        // if (Array.isArray(args.copy)) {
-        //     copies.push.apply(copies, args.copy);
-        // } else if (typeof args.copy === 'string') {
-        //     const split = args.copy.split(',');
-        //     copies.push.apply(copies, split);
-        // }
-        // copies.forEach(copy => copyToTypes(copy, types));
+        console.log("using @types folder at " + types_1);
+        if (args.omitThis) {
+            console.log("--omitThis passed, omitting root folder");
+        }
+        else {
+            args.copy.push('.');
+        }
+        args.copy.forEach(function (copy) { return copyToTypes(copy, types_1); });
         console.log("installation complete!");
     }
 }
