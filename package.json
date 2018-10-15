@@ -1,0 +1,22 @@
+{
+  "name": "indefinitely-typed",
+  "version": "1.0.0",
+  "description": "Temporary @types",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danmarshall/indefinitely-typed.git"
+  },
+  "author": "Dan Marshall",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danmarshall/indefinitely-typed/issues"
+  },
+  "homepage": "https://github.com/danmarshall/indefinitely-typed#readme",
+  "dependencies": {
+    "fs-extra": "^7.0.0"
+  }
+}
