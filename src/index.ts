@@ -1,13 +1,12 @@
 import fs = require('fs-extra');
 import path = require('path');
-import minimist = require('minimist');
 
 console.log(`=======================`);
 console.log(`indefinitely-typed installation ...`);
 
 interface Args {
     omitThis: boolean;
-    copy: string | string[];
+    copy: string[];
 }
 
 interface PackageJson {
@@ -28,7 +27,13 @@ function copyToTypes(dir: string, typesDir: string) {
     fs.copySync(srcDir, destDir, { filter: subPath => subPath.indexOf(childNodeModules) === -1 });
 }
 
-const args = minimist(process.argv.slice(2)) as any as Args;
+const argv = process.argv.slice(2);
+console.log('raw args:', argv);
+
+const args: Args = {
+    omitThis: argv.indexOf('--omitThis') !== -1,
+    copy: argv.filter(arg => arg !== '--omitThis')
+};
 console.log('args:', args);
 
 const cwd = process.cwd();
@@ -52,30 +57,37 @@ if (!fs.existsSync(pathToPackageJson)) {
     const node_modules = path.resolve(cwd, packageJson.isScoped ? '../..' : '..');
     console.log(`using node_modules at ${node_modules}`);
 
-    const types = path.resolve(node_modules, '@types');
-    if (!fs.existsSync(types)) {
-        console.log(`creating folder ${types}`);
-        fs.mkdirSync(types);
-    }
-    console.log(`using @types folder at ${types}`);
-
-    let copies: string[] = [];
-    if (args.omitThis) {
-        console.log(`--omitThis passed, omitting root folder`);
+    const segments = node_modules.split(path.sep);
+    if (segments[segments.length - 1] !== 'node_modules') {
+        console.log(`error: this is not a node_modules folder.`);
     } else {
-        copies.push('.');
+
+        const types = path.resolve(node_modules, '@types');
+        if (!fs.existsSync(types)) {
+            console.log(`creating folder ${types}`);
+            fs.mkdirSync(types);
+        }
+        console.log(`using @types folder at ${types}`);
+
+        //let copies: string[] = [];
+
+        // if (args.omitThis) {
+        //     console.log(`--omitThis passed, omitting root folder`);
+        // } else {
+        //     copies.push('.');
+        // }
+
+        // if (Array.isArray(args.copy)) {
+        //     copies.push.apply(copies, args.copy);
+        // } else if (typeof args.copy === 'string') {
+        //     const split = args.copy.split(',');
+        //     copies.push.apply(copies, split);
+        // }
+
+        // copies.forEach(copy => copyToTypes(copy, types));
+
+        console.log(`installation complete!`)
     }
-
-    if (Array.isArray(args.copy)) {
-        copies.push.apply(copies, args.copy);
-    } else if (typeof args.copy === 'string') {
-        const split = args.copy.split(',');
-        copies.push.apply(copies, split);
-    }
-
-    copies.forEach(copy => copyToTypes(copy, types));
-
-    console.log(`installation complete!`)
 }
 
 console.log(`=======================`);
