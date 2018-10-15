@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Temporary @types",
   "bin": {
-    "indefinitely-typed-install": "./dist/cli.js"
+    "indefinitely-typed": "./bin/cli.js"
   },
   "main": "dist/index.js",
   "files": [
