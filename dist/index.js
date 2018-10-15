@@ -6,15 +6,17 @@ var minimist = require("minimist");
 console.log("=======================");
 console.log("indefinitely-typed installation ...");
 function copyToTypes(folder, typesDir) {
+    console.log("---");
+    console.log("folder: " + folder);
     var destDir = path.resolve(typesDir, folder);
     if (fs.existsSync(destDir)) {
-        console.log(folder + " found " + destDir + " , deleting");
+        console.log("deleting existing " + destDir + " , ");
         fs.removeSync(destDir);
     }
     var srcDir = path.resolve(cwd, folder);
-    console.log(folder + " copying " + srcDir + " to " + destDir);
-    var childNodeModules = path.resolve(srcDir, 'node_modules');
-    fs.copySync(srcDir, destDir, { filter: function (subPath) { return subPath.indexOf(childNodeModules) === -1; } });
+    console.log("copying " + srcDir + " to " + destDir);
+    fs.copySync(srcDir, destDir);
+    console.log(folder + " complete!");
 }
 var argv = minimist(process.argv.slice(2));
 console.log('args:', argv);
@@ -45,14 +47,14 @@ else {
             fs.mkdirSync(types_1);
         }
         console.log("using @types folder at " + types_1);
-        if (!argv.name) {
-            console.log("--name not passed, omitting root folder.");
+        var folders = [];
+        if (Array.isArray(argv.folder)) {
+            folders = argv.folder;
         }
         else {
-            argv.folders = argv.folders || [];
-            argv.folders.push('.');
+            folders = [argv.folder];
         }
-        argv.folders.forEach(function (folder) { return copyToTypes(folder, types_1); });
+        folders.forEach(function (folder) { return copyToTypes(folder, types_1); });
         console.log("installation complete!");
     }
 }

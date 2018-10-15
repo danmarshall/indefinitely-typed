@@ -6,8 +6,7 @@ console.log(`=======================`);
 console.log(`indefinitely-typed installation ...`);
 
 interface Args extends minimist.ParsedArgs {
-    name?: string;
-    folders?: string[];
+    folder?: string | string[];
 }
 
 interface PackageJson {
@@ -16,16 +15,20 @@ interface PackageJson {
 }
 
 function copyToTypes(folder: string, typesDir: string) {
+    console.log(`---`);
+    console.log(`folder: ${folder}`);
+
     const destDir = path.resolve(typesDir, folder);
     if (fs.existsSync(destDir)) {
-        console.log(`${folder} found ${destDir} , deleting`);
+        console.log(`deleting existing ${destDir} , `);
         fs.removeSync(destDir);
     }
     const srcDir = path.resolve(cwd, folder);
-    console.log(`${folder} copying ${srcDir} to ${destDir}`);
+    console.log(`copying ${srcDir} to ${destDir}`);
 
-    const childNodeModules = path.resolve(srcDir, 'node_modules');
-    fs.copySync(srcDir, destDir, { filter: subPath => subPath.indexOf(childNodeModules) === -1 });
+    fs.copySync(srcDir, destDir);
+
+    console.log(`${folder} complete!`);
 }
 
 const argv = minimist(process.argv.slice(2)) as Args;
@@ -64,14 +67,15 @@ if (!fs.existsSync(pathToPackageJson)) {
         }
         console.log(`using @types folder at ${types}`);
 
-        if (!argv.name) {
-            console.log(`--name not passed, omitting root folder.`);
+        let folders: string[] = [];
+
+        if (Array.isArray(argv.folder)) {
+            folders = argv.folder;
         } else {
-            argv.folders = argv.folders || [];
-            argv.folders.push('.');
+            folders = [argv.folder];
         }
 
-        argv.folders.forEach(folder => copyToTypes(folder, types));
+        folders.forEach(folder => copyToTypes(folder, types));
 
         console.log(`installation complete!`)
     }
