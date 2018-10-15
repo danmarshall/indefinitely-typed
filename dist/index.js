@@ -2,26 +2,22 @@
 exports.__esModule = true;
 var fs = require("fs-extra");
 var path = require("path");
+var minimist = require("minimist");
 console.log("=======================");
 console.log("indefinitely-typed installation ...");
-function copyToTypes(dir, typesDir) {
-    var destDir = path.resolve(typesDir, dir);
+function copyToTypes(folder, typesDir) {
+    var destDir = path.resolve(typesDir, folder);
     if (fs.existsSync(destDir)) {
-        console.log(dir + " found " + destDir + " , deleting");
+        console.log(folder + " found " + destDir + " , deleting");
         fs.removeSync(destDir);
     }
-    var srcDir = path.resolve(cwd, dir);
-    console.log(dir + " copying " + srcDir + " to " + destDir);
+    var srcDir = path.resolve(cwd, folder);
+    console.log(folder + " copying " + srcDir + " to " + destDir);
     var childNodeModules = path.resolve(srcDir, 'node_modules');
     fs.copySync(srcDir, destDir, { filter: function (subPath) { return subPath.indexOf(childNodeModules) === -1; } });
 }
-var argv = process.argv.slice(2);
-console.log('raw args:', argv);
-var args = {
-    omitThis: argv.indexOf('--omitThis') !== -1,
-    copy: argv.filter(function (arg) { return arg !== '--omitThis'; })
-};
-console.log('args:', args);
+var argv = minimist(process.argv.slice(2));
+console.log('args:', argv);
 var cwd = process.cwd();
 console.log("cwd: " + cwd);
 var pathToPackageJson = path.resolve(cwd, 'package.json');
@@ -49,13 +45,14 @@ else {
             fs.mkdirSync(types_1);
         }
         console.log("using @types folder at " + types_1);
-        if (args.omitThis) {
-            console.log("--omitThis passed, omitting root folder");
+        if (!argv.name) {
+            console.log("--name not passed, omitting root folder.");
         }
         else {
-            args.copy.push('.');
+            argv.folders = argv.folders || [];
+            argv.folders.push('.');
         }
-        args.copy.forEach(function (copy) { return copyToTypes(copy, types_1); });
+        argv.folders.forEach(function (folder) { return copyToTypes(folder, types_1); });
         console.log("installation complete!");
     }
 }

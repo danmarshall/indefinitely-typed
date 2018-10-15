@@ -1,12 +1,13 @@
 import fs = require('fs-extra');
 import path = require('path');
+import minimist = require('minimist');
 
 console.log(`=======================`);
 console.log(`indefinitely-typed installation ...`);
 
-interface Args {
-    omitThis: boolean;
-    copy: string[];
+interface Args extends minimist.ParsedArgs {
+    name?: string;
+    folders?: string[];
 }
 
 interface PackageJson {
@@ -14,27 +15,21 @@ interface PackageJson {
     isScoped?: boolean;
 }
 
-function copyToTypes(dir: string, typesDir: string) {
-    const destDir = path.resolve(typesDir, dir);
+function copyToTypes(folder: string, typesDir: string) {
+    const destDir = path.resolve(typesDir, folder);
     if (fs.existsSync(destDir)) {
-        console.log(`${dir} found ${destDir} , deleting`);
+        console.log(`${folder} found ${destDir} , deleting`);
         fs.removeSync(destDir);
     }
-    const srcDir = path.resolve(cwd, dir);
-    console.log(`${dir} copying ${srcDir} to ${destDir}`);
+    const srcDir = path.resolve(cwd, folder);
+    console.log(`${folder} copying ${srcDir} to ${destDir}`);
 
     const childNodeModules = path.resolve(srcDir, 'node_modules');
     fs.copySync(srcDir, destDir, { filter: subPath => subPath.indexOf(childNodeModules) === -1 });
 }
 
-const argv = process.argv.slice(2);
-console.log('raw args:', argv);
-
-const args: Args = {
-    omitThis: argv.indexOf('--omitThis') !== -1,
-    copy: argv.filter(arg => arg !== '--omitThis')
-};
-console.log('args:', args);
+const argv = minimist(process.argv.slice(2)) as Args;
+console.log('args:', argv);
 
 const cwd = process.cwd();
 console.log(`cwd: ${cwd}`);
@@ -69,13 +64,14 @@ if (!fs.existsSync(pathToPackageJson)) {
         }
         console.log(`using @types folder at ${types}`);
 
-        if (args.omitThis) {
-            console.log(`--omitThis passed, omitting root folder`);
+        if (!argv.name) {
+            console.log(`--name not passed, omitting root folder.`);
         } else {
-            args.copy.push('.');
+            argv.folders = argv.folders || [];
+            argv.folders.push('.');
         }
 
-        args.copy.forEach(copy => copyToTypes(copy, types));
+        argv.folders.forEach(folder => copyToTypes(folder, types));
 
         console.log(`installation complete!`)
     }
