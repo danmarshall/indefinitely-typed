@@ -1,7 +1,11 @@
 {
   "name": "indefinitely-typed",
-  "version": "1.0.0",
-  "description": "Temporary @types",
+  "version": "1.0.1",
+  "description": "🐣 Incubate your TypeScript declarations",
+  "keywords": [
+    "TypeScript",
+    "DefinitelyTyped"
+  ],
   "bin": {
     "indefinitely-typed": "./bin/cli.js"
   },
