@@ -2,7 +2,16 @@
 
 For TypeScript declarations that are still ...hatching.
 
-[DefinitelyTyped](http://definitelytyped.org/) is the repository for __high quality__ TypeScript type definitions. Use this tool if your definitions are not yet up to that quality bar, but you still need to use them in a project.
+## What this does
+
+Copies your folders into the dependee's `node_modules/@types/` folder. Because that's where the TypeScript compiler might look for it - see [TypeScript Module Resolution](https://www.typescriptlang.org/docs/handbook/module-resolution.html).
+
+## Why you may need it
+
+[DefinitelyTyped](http://definitelytyped.org/) is the repository for __high quality__ TypeScript type definitions. Use this tool if:
+* your definitions are "pre-release" or a lower quality standard, but you still need to use them in a project.
+* you need to maintain versioning not possible with the [@types publisher](https://github.com/Microsoft/types-publisher).
+* you need to publish on demand, and not wait for the [@types publisher](https://github.com/Microsoft/types-publisher).
 
 ## Usage
 
