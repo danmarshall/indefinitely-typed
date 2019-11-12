@@ -9,7 +9,7 @@ Copies your folders into the dependee's `node_modules/@types/` folder. Because t
 ## Why you may need it
 
 [DefinitelyTyped](http://definitelytyped.org/) is the repository for __high quality__ TypeScript type definitions. Use this tool if:
-* your definitions are "pre-release" or a lower quality standard, but you still need to use them in a project.
+* your definitions are "pre-release", lacking tests or incomplete, but you still need to use them in a project.
 * you need to maintain versioning not possible with the [@types publisher](https://github.com/Microsoft/types-publisher).
 * you need to publish on demand, and not wait for the [@types publisher](https://github.com/Microsoft/types-publisher).
 
