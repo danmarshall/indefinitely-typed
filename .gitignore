@@ -59,3 +59,9 @@ typings/
 
 # next.js build output
 .next
+
+# include test stuff
+!test/node_modules
+
+# but not test output
+test/node_modules/@types
