@@ -17,7 +17,7 @@
   "scripts": {
     "build": "tsc -p ./src",
     "watch": "tsc -p ./src -w",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cd test/node_modules/test && node ../../../bin/cli2.js --folder test-package-typings && node ../@types/test-package-typings/test-package/success.js"
   },
   "repository": {
     "type": "git",
